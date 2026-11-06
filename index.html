@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101b2a">
+  <meta name="description" content="Cost2Profit — calculate your costs, profit margin, and a smart selling price. Free, ad-free, and private.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Cost2Profit">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Cost2Profit — Price with confidence</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span>C<span class="brand-two">2</span>P</span></div>
+        <div><div class="brand-name">Cost<span>2</span>Profit</div><div class="brand-caption">Price with confidence.</div></div>
+      </div>
+      <div class="header-actions">
+        <span class="privacy"><span class="privacy-dot"></span> Private · Ad-free</span>
+        <button id="installBtn" class="button button-outline button-compact" hidden>Install app</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div class="eyebrow">SMART PRICING TOOL <span class="eyebrow-line"></span> ALWAYS FREE</div>
+        <h1>From costs to <em>clarity.</em></h1>
+        <p>Understand every expense, protect your margin, and find a selling price that makes sense.</p>
+      </section>
+
+      <div class="workspace">
+        <div class="main-column">
+          <section class="panel" aria-labelledby="setup-heading">
+            <div class="section-title-row"><div><div class="step-label">01 / YOUR BUSINESS</div><h2 id="setup-heading">Set up your calculation</h2></div><span class="pill">Editable</span></div>
+            <div class="form-grid">
+              <label class="field"><span>Business type</span><select id="businessType"><option value="product">Physical product</option><option value="service">Service</option><option value="digital">Digital product</option><option value="custom">Custom business</option></select></label>
+              <label class="field"><span>Currency</span><select id="currency"><option value="USD">USD — US Dollar</option><option value="MAD">MAD — Moroccan Dirham</option><option value="EUR">EUR — Euro</option><option value="GBP">GBP — British Pound</option><option value="SAR">SAR — Saudi Riyal</option><option value="AED">AED — UAE Dirham</option><option value="QAR">QAR — Qatari Riyal</option><option value="CAD">CAD — Canadian Dollar</option><option value="INR">INR — Indian Rupee</option><option value="JPY">JPY — Japanese Yen</option><option value="OTHER">Other (generic)</option></select></label>
+            </div>
+            <div class="notice small">All expense amounts are <strong>per sale</strong>. Add a percentage-based expense for fees that depend on the selling price.</div>
+          </section>
+
+          <section class="panel" aria-labelledby="costs-heading">
+            <div class="section-title-row"><div><div class="step-label">02 / YOUR EXPENSES</div><h2 id="costs-heading">Cost breakdown</h2></div><button id="resetPreset" class="text-button" type="button">Reset template</button></div>
+            <div class="cost-head" aria-hidden="true"><span>EXPENSE</span><span>TYPE / VALUE</span></div>
+            <div id="costRows" class="cost-rows"></div>
+            <button id="addCost" class="button button-add" type="button"><span class="plus-icon">+</span> Add an expense</button>
+            <div class="cost-totals"><span>Fixed costs per sale</span><strong id="fixedTotal">$0.00</strong></div>
+            <div class="cost-totals muted"><span>Variable fees (% of sale)</span><strong id="rateTotal">0%</strong></div>
+          </section>
+
+          <section class="panel" aria-labelledby="pricing-heading">
+            <div class="section-title-row"><div><div class="step-label">03 / YOUR GOAL</div><h2 id="pricing-heading">Pricing targets</h2></div></div>
+            <div class="target-wrap"><label for="targetMargin">Desired profit margin</label><div class="target-value"><input id="targetMargin" type="number" min="0" max="99.9" step="0.5" inputmode="decimal" value="30" aria-label="Target margin percent"><span>%</span></div></div>
+            <input id="marginSlider" class="range" type="range" min="0" max="80" step="1" value="30" aria-label="Target profit margin slider">
+            <div class="range-ends"><span>0%</span><span>80%</span></div>
+            <div class="form-grid after-range"><label class="field"><span>Your current / planned price</span><div class="input-affix"><input id="currentPrice" type="number" min="0" step="0.01" inputmode="decimal" value="65"><span id="currencySymbol">USD</span></div></label><label class="field"><span>Units sold (for projection)</span><input id="quantity" type="number" min="1" max="100000000" step="1" inputmode="numeric" value="100"></label></div>
+          </section>
+        </div>
+
+        <aside class="results-column" aria-label="Calculated results">
+          <section class="result-hero">
+            <div class="result-kicker"><span class="mini-dot"></span> RECOMMENDED SELLING PRICE</div>
+            <div id="recommendedPrice" class="hero-number" aria-live="polite">$50.00</div>
+            <p id="recommendationSub">Price needed to reach your target net margin.</p>
+            <div class="hero-split"><div><span>PROFIT PER SALE</span><strong id="recommendProfit">$15.00</strong></div><div><span>TARGET MARGIN</span><strong id="recommendMargin">30%</strong></div></div>
+          </section>
+          <div id="warning" class="warning" role="status" hidden></div>
+          <section class="panel results-panel"><div class="step-label">AT YOUR CURRENT PRICE</div><h2>Profit snapshot</h2><div id="profitStatus" class="status-pill">Calculating</div>
+            <div class="stats-grid"><div class="stat"><span>Net profit / sale</span><strong id="actualProfit">—</strong></div><div class="stat"><span>Actual profit margin</span><strong id="actualMargin">—</strong></div><div class="stat"><span>Break-even price</span><strong id="breakEven">—</strong></div><div class="stat"><span>Markup on fixed costs</span><strong id="markup">—</strong></div></div>
+            <div class="breakdown-title">Where each sale goes</div><div class="bar-track" aria-label="Cost and profit composition"><div id="fixedBar" class="bar-fixed"></div><div id="feeBar" class="bar-fee"></div><div id="profitBar" class="bar-profit"></div></div><div class="bar-legend"><span><i class="legend-fixed"></i>Fixed costs</span><span><i class="legend-fee"></i>Variable fees</span><span><i class="legend-profit"></i>Profit</span></div>
+            <div class="projection"><span>Projected net profit at <b id="quantityLabel">100</b> sales</span><strong id="projection">—</strong></div>
+          </section>
+          <section class="panel save-panel"><div class="step-label">KEEP YOUR WORK</div><h2>Saved calculations</h2><p>Stored only on this device. No account or cloud required.</p><div class="save-controls"><input id="scenarioName" type="text" maxlength="60" placeholder="e.g. Classic watch" aria-label="Calculation name"><button id="saveScenario" class="button button-dark" type="button">Save</button></div><div id="savedList" class="saved-list"></div><button id="copySummary" class="button button-outline full" type="button">Copy price summary</button><div id="feedback" class="feedback" aria-live="polite"></div></section>
+        </aside>
+      </div>
+    </main>
+    <footer><span>© <span id="year"></span> Cost2Profit</span><span>Free forever · No ads · No tracking · Works offline</span></footer>
+  </div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
